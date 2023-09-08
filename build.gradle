@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.15'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'groovy'
 }
 
 group = 'study'
@@ -22,15 +23,47 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	//spring retry사용
+	implementation 'org.springframework.retry:spring-retry'
+
+
+	//레디스사용
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    //spock 테스트 사용
+	testImplementation('org.spockframework:spock-core:2.3-groovy-3.0')
+	testImplementation('org.spockframework:spock-spring:2.3-groovy-3.0')
+
+	// 런타임에 클래스 기반 mock 을 만들기 위해서 필요
+	testImplementation('net.bytebuddy:byte-buddy:1.12.19')
+
+	//태스트컨테이너 관련 의존성(테스트를 위한 컨테이너)
+	testImplementation "org.testcontainers:spock:1.19.0"
+	testImplementation 'org.testcontainers:mariadb:1.16.0'
+
+
+	// mockWebServer
+	testImplementation('com.squareup.okhttp3:okhttp:4.10.0')
+	testImplementation('com.squareup.okhttp3:mockwebserver:4.10.0')
+
+	//handlebars
+	implementation 'pl.allegro.tech.boot:handlebars-spring-boot-starter:0.3.4'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
+
+//jar파일명 알아보기 쉽게 ㅎㅎㅎㅎ
+bootJar{
+	archiveFileName="app.jar"
 }

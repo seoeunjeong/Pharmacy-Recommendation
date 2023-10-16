@@ -30,7 +30,7 @@ public class KakaoAddressSearchService {
     private String kakaoRestApikey;
 
 
-    //외부호출시 재시도 사용 faile도 고려해서 recover작성해야함
+    //외부호출시 재시도 사용 fail도 고려해서 recover작성해야함
     @Retryable(
             value = {RuntimeException.class},
             maxAttempts = 2,

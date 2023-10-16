@@ -31,7 +31,8 @@ public class DirectionService {
     @Transactional
     public List<Direction> saveAll(List<Direction> directionList){
 
-        if(CollectionUtils.isEmpty(directionList)) return Collections.emptyList();
+        if(CollectionUtils.isEmpty(directionList))
+            return Collections.emptyList();
 
         return directionRepository.saveAll(directionList);
 

@@ -17,10 +17,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PharmacyController {
     //db데이터를 redis로 동기화하는 메소드 만들기
+
     private final PharmacyRepositoryService pharmacyRepositoryService;
+
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
-    // 데이터 초기 셋팅을 위한 임시 메소드 해당 요청이오면 모든약국정보 레디스에 추가.
+    // 데이터 초기 셋팅을 위한 임시 메소드 해당 요청이 오면 모든약국 정보 레디스에 추가.
     @GetMapping("/csv/save")
     public String saveCsv() {
         //saveCsvToDatabase();

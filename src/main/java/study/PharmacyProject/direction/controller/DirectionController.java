@@ -15,20 +15,13 @@ import study.PharmacyProject.direction.service.DirectionService;
 public class DirectionController {
 
     private final DirectionService directionService;
-    private static final String DIRECTION_BASE_URL ="https://map.kakao.com/link/map/";
-
 
     @GetMapping("/dir/{encodedId}")
     public String searchDirection(@PathVariable("encodedId") String encodedId){
-        Direction resultDirection = directionService.findbyId(encodedId);
 
-        String params = String.join(",", resultDirection.getTargetPharmacyName(),
-                String.valueOf(resultDirection.getTargetLatitude()), String.valueOf(resultDirection.getInputLongitude()));
+        String result = directionService.findDirectionUrlById(encodedId);
 
-        String result = UriComponentsBuilder.fromHttpUrl(DIRECTION_BASE_URL + params)
-                .toUriString();//인코딩지원해준당
-
-        log.info("directipn params:{},url:{}",params,result);
+        log.info("[DirectionController.searchDirection] direction url:{}",result);
 
         return"redirect:"+result;
 

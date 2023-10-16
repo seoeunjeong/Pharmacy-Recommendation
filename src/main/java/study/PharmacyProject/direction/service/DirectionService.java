@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 import study.PharmacyProject.api.dto.DocumentDto;
 import study.PharmacyProject.api.service.KakaoCategorySearchService;
 import study.PharmacyProject.direction.Repository.DirectionRepository;
@@ -22,10 +23,12 @@ import java.util.stream.Collectors;
 public class DirectionService {
 
     private final PharmacySearchService pharmacySearchService;
+
     //최대 검색 갯수
     private static final int MAX_SEARCH_COUNT=3;
     //반경 10 km
     private static final double RADIUS_KM=10.0;
+    private static final String DIRECTION_BASE_URL ="https://map.kakao.com/link/map/";
 
     private final KakaoCategorySearchService kakaoCategorySearchService;
 
@@ -100,9 +103,15 @@ public class DirectionService {
         return directionRepository.saveAll(directionList);
     }
 
-    public Direction findbyId(String encodedId){
+    public String findDirectionUrlById(String encodedId){
         Long decodedId = base62Service.decodeDirectionId(encodedId);
-       return directionRepository.findById(decodedId).orElse(null);
+        Direction direction= directionRepository.findById(decodedId).orElse(null);
+        String params = String.join(",", direction.getTargetPharmacyName(),
+                String.valueOf(direction.getTargetLatitude()), String.valueOf(direction.getInputLongitude()));
+
+        String result = UriComponentsBuilder.fromHttpUrl(DIRECTION_BASE_URL + params)
+                .toUriString();//인코딩지원해준당
+        return result;
     }
 
     //Haversine formula 고객의 위도 경도와 약국의 위도 경도사이의 거리를 구하는 메소드

@@ -1,10 +1,10 @@
 package study.PharmacyProject.api.service
 
+import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
-import spock.lang.Specification
 import study.PharmacyProject.AbstractIntegrationContainerBaseTest
-import study.PharmacyProject.api.dto.KakaoApiResponseDto
 
+@Slf4j
 class KakaoAddressSearchServiceTest extends AbstractIntegrationContainerBaseTest{
 
     @Autowired
@@ -31,6 +31,7 @@ class KakaoAddressSearchServiceTest extends AbstractIntegrationContainerBaseTest
         result.documentList.size()>0
         result.metaDto.totalCount>0
         result.documentList.get(0).addressName !=null
+
     }
 
 

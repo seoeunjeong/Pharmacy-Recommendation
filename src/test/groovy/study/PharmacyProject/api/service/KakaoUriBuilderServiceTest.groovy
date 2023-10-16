@@ -2,12 +2,13 @@ package study.PharmacyProject.api.service
 
 import spock.lang.Specification
 
-import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 class KakaoUriBuilderServiceTest extends Specification {
 
     private KakaoUriBuilderService kakaoUriBuilderService;
+
+    //단위테스트 자바클래스 직접 생성해서 사용
 
     def setup(){
         kakaoUriBuilderService=new KakaoUriBuilderService();
@@ -21,9 +22,9 @@ class KakaoUriBuilderServiceTest extends Specification {
         def charset = StandardCharsets.UTF_8
         when:
         def uri = kakaoUriBuilderService.buildUriByAddressSearch(address)
-        def decoderesult = URLDecoder.decode(uri.toString(), charset)
+        def decodeResult = URLDecoder.decode(uri.toString(), charset)
+
         then:
-        println uri
         decoderesult == "https://dapi.kakao.com/v2/local/search/address.json?query=서울 성북구"
     }
 

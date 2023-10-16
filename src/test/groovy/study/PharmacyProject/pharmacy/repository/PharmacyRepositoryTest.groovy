@@ -1,7 +1,6 @@
 package study.PharmacyProject.pharmacy.repository
 
 import org.springframework.beans.factory.annotation.Autowired
-
 import study.PharmacyProject.AbstractIntegrationContainerBaseTest
 import study.PharmacyProject.pharmacy.entity.Pharmacy
 
@@ -10,7 +9,9 @@ class PharmacyRepositoryTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
     private PharmacyRepository pharmacyRepository
-
+    /*싱글톤 컨테이너를 사용하여 테스트 하기때문에
+    * 각 테스트 실행전에 데이터를 지워줘야 한다
+    * test @Transactional 사용과 같음 */
     def setup(){
         pharmacyRepository.deleteAll()
     }
@@ -39,7 +40,7 @@ class PharmacyRepositoryTest extends AbstractIntegrationContainerBaseTest {
     }
 
 
-    def "save all"(){
+    def "PharmacyRepository save all"(){
         given:
         String address = "서울 특별시 성북구 종암동"
         String name = "은혜 약국"

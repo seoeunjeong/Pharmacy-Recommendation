@@ -17,8 +17,8 @@ import study.PharmacyProject.api.dto.KakaoApiResponseDto;
 
 import java.net.URI;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class KakaoAddressSearchService {
 
@@ -30,7 +30,7 @@ public class KakaoAddressSearchService {
     private String kakaoRestApikey;
 
 
-    //외부호출시 재시도 사용 fail도 고려해서 recover작성해야함
+    //외부호출시 재시도 사용, fail도 고려해서 모두 실패시recover작성해야함
     @Retryable(
             value = {RuntimeException.class},
             maxAttempts = 2,
@@ -50,6 +50,7 @@ public class KakaoAddressSearchService {
 
     }
 
+    /*return 타입을 맞춰주지않을 경우 에러 발생 */
     @Recover
     public KakaoApiResponseDto recover(RuntimeException e,String address){
         log.error("All the retries failed. address:{},error={}",address,e.getMessage());

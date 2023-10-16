@@ -26,14 +26,14 @@ public class KakaoUriBuilderService {
     }
 
     public URI buildUriByCategorySearch(double latitude, double longitude, double radius, String category) {
-
+        //km 사용했었는데 카카오에서는 meter 단위
         double meterRadius = radius * 1000;
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(KAKAO_LOCAL_CATEGORY_SEARCH_URL);
-        uriBuilder.queryParam("category_group_code", category);
-        uriBuilder.queryParam("x", longitude);
-        uriBuilder.queryParam("y", latitude);
-        uriBuilder.queryParam("radius", meterRadius);
+        uriBuilder.queryParam("category_group_code",category);
+        uriBuilder.queryParam("x",longitude);
+        uriBuilder.queryParam("y",latitude);
+        uriBuilder.queryParam("radius",meterRadius);
         uriBuilder.queryParam("sort","distance");
 
         URI uri = uriBuilder.build().encode().toUri();

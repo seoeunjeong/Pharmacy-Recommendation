@@ -12,32 +12,21 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PharmacyRepositoryService {
     private final PharmacyRepository pharmacyRepository;
 
+    //약국 주소 변경
     @Transactional
     public void updateAddress(Long id,String address){
-        Pharmacy entity = pharmacyRepository.findById(id).orElse(null);
-        if(Objects.isNull(entity)){
+        Pharmacy findPharmacy = pharmacyRepository.findById(id).orElse(null);
+        if(Objects.isNull(findPharmacy)){
             log.info("[PharmacyRepositoryService.updateAddress] not found id:{}",id);
             return;
         }
-        entity.changePharmacyAddress(address);
+        findPharmacy.changePharmacyAddress(address);
     }
-
-
-    ///업데이트안되지 jpa 하나의 트랜잭션안에서동작한 커밋해야 반영된다ㅎㅎ까먹지말자
-    @Transactional(readOnly = true)
-    public void updateAddressWithoutTransaction(Long id,String address){
-        Pharmacy entity = pharmacyRepository.findById(id).orElse(null);
-        if(Objects.isNull(entity)){
-            log.info("[PharmacyRepositoryService.updateAddress] not found id:{}",id);
-            return;
-        }
-        entity.changePharmacyAddress(address);
-    }
-
 
     public List<Pharmacy> findAll(){
         return pharmacyRepository.findAll();

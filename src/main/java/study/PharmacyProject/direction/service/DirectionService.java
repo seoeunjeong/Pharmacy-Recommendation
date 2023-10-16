@@ -18,32 +18,30 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+/*길안내 거리제공 서비스 Direction 을 저장해놓아야하는 이유 ?*/
 public class DirectionService {
+
+    private final PharmacySearchService pharmacySearchService;
     //최대 검색 갯수
     private static final int MAX_SEARCH_COUNT=3;
     //반경 10 km
     private static final double RADIUS_KM=10.0;
 
-    private final PharmacySearchService pharmacySearchService;
     private final KakaoCategorySearchService kakaoCategorySearchService;
+
     private final DirectionRepository directionRepository;
 
-    @Transactional
-    public List<Direction> saveAll(List<Direction> directionList){
-
-        if(CollectionUtils.isEmpty(directionList))
-            return Collections.emptyList();
-
-        return directionRepository.saveAll(directionList);
-
-    }
+    private final Base62Service base62Service;
 
 
-    //모든 약국을 디비에서 다가져와서...어플리케이션에서 요청 주소와 모든 약국의 주소를 거리를 계산해서.. 해당반경에서 3개만..
+
+    //가까운 약국 3개 Direction 반환
     public List<Direction> buildDirectionList(DocumentDto documentDto) {
 
         if (Objects.isNull(documentDto)) return Collections.emptyList();
-        //약국 데이터를 조회
+
+        // DB에 저장된 공공기관약국데이터를 조회 후
+        // 거리 계산 알고리즘을 이용하여 ,고객과 약국 사잉의 거리(distance)계산하여 sort , direction 저장
         return pharmacySearchService.searchPharmacyDtoList()
                 .stream()
                 .map(pharmacyDto ->
@@ -67,7 +65,8 @@ public class DirectionService {
 
     }
 
-    // pharmacy search by category kakao api
+    // kakao api를 이용한 약국데이터를 조회후
+    // kakao가 제공하는 distance를 통해 가까운 약국정보 direction 저장
     public List<Direction> buildDirectionListByCategoryApi(DocumentDto inputDocumentDto) {
 
         if(Objects.isNull(inputDocumentDto)) return Collections.emptyList();
@@ -85,13 +84,28 @@ public class DirectionService {
                                 .targetAddress(resultDocumentDto.getAddressName())
                                 .targetLatitude(resultDocumentDto.getLatitude())
                                 .targetLongitude(resultDocumentDto.getLongitude())
-                                .distance(resultDocumentDto.getDistance() * 0.001) // km 단위
+                                .distance(resultDocumentDto.getDistance() * 0.001) // m 단위 -> km 단위
                                 .build())
                 .limit(MAX_SEARCH_COUNT)
                 .collect(Collectors.toList());
     }
 
-    //Haversine formula
+//    추천결과를 저장하는 기능 꼭 필요할까?
+    @Transactional
+    public List<Direction> saveAll(List<Direction> directionList){
+
+        if(CollectionUtils.isEmpty(directionList))
+            return Collections.emptyList();
+
+        return directionRepository.saveAll(directionList);
+    }
+
+    public Direction findbyId(String encodedId){
+        Long decodedId = base62Service.decodeDirectionId(encodedId);
+       return directionRepository.findById(decodedId).orElse(null);
+    }
+
+    //Haversine formula 고객의 위도 경도와 약국의 위도 경도사이의 거리를 구하는 메소드
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         lat1 = Math.toRadians(lat1);
         lon1 = Math.toRadians(lon1);

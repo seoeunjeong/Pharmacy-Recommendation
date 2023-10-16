@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class PharmacySearchService {
 
     private final PharmacyRepositoryService pharmacyRepositoryService;
+
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
     public List<PharmacyDto> searchPharmacyDtoList(){
 
@@ -26,7 +27,7 @@ public class PharmacySearchService {
             log.info("레디스 성공!");
             return pharmacyDtoList;
         }
-        //db
+        //db에서 모든 약국 조회후 dto로 반환
         return pharmacyRepositoryService.findAll()
                 .stream()
                 .map(this::convertToPharmacyDto)

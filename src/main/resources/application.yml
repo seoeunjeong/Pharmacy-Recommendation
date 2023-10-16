@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: local #default
     group:
       local:
         -common
@@ -36,6 +36,10 @@ spring:
       ddl-auto: validate
     show-sql: true
 
+pharmacy:
+  recommendation:
+    base:
+      url: http://localhost:8080/dir/
 
 
 ---

@@ -3,16 +3,15 @@ package study.PharmacyProject.pharmacy.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.util.UriComponentsBuilder;
 import study.PharmacyProject.api.dto.DocumentDto;
 import study.PharmacyProject.api.dto.KakaoApiResponseDto;
 import study.PharmacyProject.api.service.KakaoAddressSearchService;
-import study.PharmacyProject.direction.Repository.DirectionRepository;
 import study.PharmacyProject.direction.dto.OutputDto;
 import study.PharmacyProject.direction.entity.Direction;
+import study.PharmacyProject.direction.service.Base62Service;
 import study.PharmacyProject.direction.service.DirectionService;
 
 import java.util.Collections;
@@ -26,9 +25,15 @@ import java.util.stream.Collectors;
 public class PharmacyRecommendationService {
 
     private final KakaoAddressSearchService kakaoAddressSearchService;
+
     private final DirectionService directionService;
+
+    private final Base62Service base62Service;
+
+    @Value("${pharmacy.recommendation.base.url}")
+    private String baseUrl;
     private static final String ROAD_VIEW_BASE_URL ="https://map.kakao.com/link/roadview/";
-    private static final String DIRECTION_BASE_URL ="https://map.kakao.com/link/map/";
+//    private static final String DIRECTION_BASE_URL ="https://map.kakao.com/link/map/";
 
 
     public List<OutputDto> recommendPharmacyList(String address){
@@ -41,42 +46,29 @@ public class PharmacyRecommendationService {
         }
 
         //길안내
-
         DocumentDto documentDto = kakaoApiResponseDto.getDocumentList().get(0);
 
-        //공공기관 데이터이용
-        return directionService.buildDirectionList(documentDto)
+/*        ToDo !!!카카오 카테고리 api 를 사용하여 더 많은 약국추천 가능 */
+//        List<Direction> directionList = directionService.buildDirectionListByCategoryApi(documentDto);
+
+        List<Direction> directionList = directionService.buildDirectionList(documentDto);
+        //저장데이터를 통해 위치 안내를 해야하는이유? 왜저장을 한뒤에 안내해야하지?
+        //direction 의 Id값을 이용하여 shortenUrl을 만들어서 제공하지않는다면 저장할 필요없지않을까?
+
+        List<Direction> directions = directionService.saveAll(directionList);
+        return directions
                 .stream()
                 .map(this::convertToOutputDto)
                 .collect(Collectors.toList());
 
-        //카카오 api장소검색이용(활용)
-//       List<Direction> directions1 = directionService.buildDirectionListByCategoryApi(documentDto);
-
-        //저장데이터를 통해 위치 안내를 해야하는이유? 왜저장을 한뒤에 안내해야하지?
-
-//        return directionService.saveAll(directions)
-//                .stream()
-//                .map(this::convertToOutputDto)
-//                .collect(Collectors.toList());
-
     }
 
 
-
     private OutputDto convertToOutputDto(Direction direction){
-        String params = String.join(",", direction.getTargetPharmacyName(),
-                String.valueOf(direction.getTargetLatitude()), String.valueOf(direction.getInputLongitude()));
-
-        String result = UriComponentsBuilder.fromHttpUrl(DIRECTION_BASE_URL + params)
-                .toUriString();//인코딩지원해준당
-
-        log.info("directipn params:{},url:{}",params,result);
-
         return OutputDto.builder()
-                .pharmacyAddress(direction.getInputAddress())
+                .pharmacyAddress(direction.getTargetAddress())
                 .pharmacyName(direction.getTargetPharmacyName())
-                .directionUrl(result)
+                .directionUrl(baseUrl+base62Service.encodeDirectionId(direction.getId()))
                 .roadViewUrl(ROAD_VIEW_BASE_URL+direction.getTargetLatitude()+","+direction.getTargetLongitude())
                 .distance(String.format("%.2f km",direction.getDistance()))
                 .build();

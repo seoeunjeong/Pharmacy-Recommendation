@@ -5,22 +5,22 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.spockframework.spring.SpringBean
 import org.springframework.beans.factory.annotation.Autowired
-import org.testcontainers.shaded.com.google.common.net.MediaType
 import study.PharmacyProject.AbstractIntegrationContainerBaseTest
 import study.PharmacyProject.api.dto.DocumentDto
 import study.PharmacyProject.api.dto.KakaoApiResponseDto
 import study.PharmacyProject.api.dto.MetaDto
 
-import java.net.http.HttpHeaders
 
 import static org.springframework.http.HttpHeaders.*
 import static org.springframework.http.MediaType.*
 
+/*MockWebServer를 통해 응답실패시 retry 테스트 */
 class KakaoAddressSearchRetryTest extends AbstractIntegrationContainerBaseTest {
 
     @Autowired
     private KakaoAddressSearchService kakaoAddressSearchService
 
+    // @mockBean 통합테스트환경에서  Uri를 카카오 api 가 아닌 mockServer로 리턴하기위해 사용
     @SpringBean
     private KakaoUriBuilderService kakaoUriBuilderService = Mock()
 

@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import study.PharmacyProject.direction.dto.InputDto;
-import study.PharmacyProject.direction.dto.OutputDto;
 import study.PharmacyProject.pharmacy.service.PharmacyRecommendationService;
 
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,12 +20,13 @@ public class FormController {
 
     @GetMapping("/")
     public String main(){
-
         return "main";
     }
 
+    /*modelAndview를 생성해서 리턴하는 강의내용과 달리
+     model을 주입받아서 데이터를 전달해도된다.*/
     @PostMapping("/search")
-    public String post(@ModelAttribute InputDto inputDto, Model model){
+    public String post(@ModelAttribute InputDto inputDto,Model model){
 
         model.addAttribute("outputFormList", pharmacyRecommendationService.recommendPharmacyList(inputDto.getAddress()));
 

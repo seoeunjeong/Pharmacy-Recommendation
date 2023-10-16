@@ -1,3 +1,12 @@
+# 실제 서비스 가능한 수준의 프로젝트 구현
+
+Spring Data JPA를 이용한 CRUD를 구현하고
+RestTemplate를 이용하여 실제 카카오api를 사용하는 방법을 익히고
+카카오 api로 반환받은 위도 경도를 하버사인 포뮬라 알고리즘을 이용하여 가까운 위치정보를 제공해보고 
+redis 캐싱을 사용하여 성능최적화까지 구현해보도록 한다.
+
+
+
 # Pharmacy-Recommendation
 
 해당 코드는 [패스트 캠퍼스 강의](https://fastcampus.co.kr/dev_online_befinal)에서 사용된다.   

@@ -77,7 +77,7 @@ commit으로 기록 된다.
 
 ## Tech Stack
 
-- JDK 11
+- JDK 17
 - Spring Boot 2.6.7
 - Spring Data JPA
 - Gradle

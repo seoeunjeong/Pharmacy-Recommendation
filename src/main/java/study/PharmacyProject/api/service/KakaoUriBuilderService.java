@@ -11,7 +11,7 @@ import java.net.URI;
 public class KakaoUriBuilderService {
     //카카오톡 api 사용을 위한 uri만들기
     private static final String KAKAO_LOCAL_SEARCH_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.json";
-    private static final String KAKAO_LOCAL_CATEGORY_SEARCH_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
+    private static final String KAKAO_LOCAL_CATEGORY_SEARCH_URL = "https://dapi.kakao.com/v2/local/search/category";
 
 
     public URI buildUriByAddressSearch(String address){

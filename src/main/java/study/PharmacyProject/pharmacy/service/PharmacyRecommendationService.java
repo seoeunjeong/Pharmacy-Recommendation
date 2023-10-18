@@ -48,10 +48,11 @@ public class PharmacyRecommendationService {
         //길안내
         DocumentDto documentDto = kakaoApiResponseDto.getDocumentList().get(0);
 
-/*        ToDo !!!카카오 카테고리 api 를 사용하여 더 많은 약국추천 가능 */
+///*        ToDo !!!카카오 카테고리 api 를 사용하여 더 많은 약국추천 가능 */
 //        List<Direction> directionList = directionService.buildDirectionListByCategoryApi(documentDto);
 
         List<Direction> directionList = directionService.buildDirectionList(documentDto);
+
         //저장데이터를 통해 위치 안내를 해야하는이유? 왜저장을 한뒤에 안내해야하지?
         //direction 의 Id값을 이용하여 shortenUrl을 만들어서 제공하지않는다면 저장할 필요없지않을까?
 

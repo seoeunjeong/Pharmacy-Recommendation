@@ -21,7 +21,7 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(redisHost, redisPort);
     }
-    //Lettuce 권장
+    //Lettuce 권장, 성능 우수
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {

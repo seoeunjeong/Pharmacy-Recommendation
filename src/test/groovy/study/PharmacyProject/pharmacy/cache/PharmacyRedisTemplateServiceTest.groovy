@@ -6,7 +6,6 @@ import study.PharmacyProject.pharmacy.dto.PharmacyDto
 
 class PharmacyRedisTemplateServiceTest extends AbstractIntegrationContainerBaseTest {
     //레디스 띄워서 통합테스트 진행
-
     @Autowired
     PharmacyRedisTemplateService pharmacyRedisTemplateService;
 

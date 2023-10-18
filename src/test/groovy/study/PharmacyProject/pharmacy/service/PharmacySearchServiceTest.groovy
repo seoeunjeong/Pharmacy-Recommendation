@@ -9,7 +9,7 @@ class PharmacySearchServiceTest extends Specification {
 
     private PharmacySearchService pharmacySearchService;
 
-    //단위테스트 진행 의존성이 필요한것들은 모킹하기
+    //단위테스트
     private PharmacyRepositoryService pharmacyRepositoryService = Mock()
     private PharmacyRedisTemplateService pharmacyRedisTemplateService = Mock()
 

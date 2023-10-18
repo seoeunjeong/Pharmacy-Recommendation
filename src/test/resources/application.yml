@@ -12,3 +12,9 @@ kakao:
     api:
       key: ${KAKAO_REST_API_KEY}
 
+pharmacy:
+  recommendation:
+    base:
+      url: http://localhost:8080/dir/
+
+

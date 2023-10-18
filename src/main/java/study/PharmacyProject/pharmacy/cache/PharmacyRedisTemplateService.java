@@ -25,15 +25,18 @@ public class PharmacyRedisTemplateService {
 
     private final ObjectMapper objectMapper;
 
-    //hash자료구조 사용해서 약국데이터 관리
+    //hash 자료구조 사용해서 약국데이터 관리
+    //CACHE_KEY,Pharmacy Key, Pharmacy ->String (objectMapper를 이용해 json 형태) 으로 변경 저장
     private HashOperations<String,String,String> hashOperations;
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.hashOperations = redisTemplate.opsForHash();
     }
 
     public void save(PharmacyDto pharmacyDto) {
-        if(Objects.isNull(pharmacyDto) || Objects.isNull(pharmacyDto.getId())) {
+
+        if (Objects.isNull(pharmacyDto) || Objects.isNull(pharmacyDto.getId())) {
             log.error("Required Values must not be null");
             return;
         }
@@ -72,11 +75,11 @@ public class PharmacyRedisTemplateService {
     }
 
 
-
+    //객체 ->json
     private String serializePharmacyDto(PharmacyDto pharmacyDto) throws JsonProcessingException {
         return objectMapper.writeValueAsString(pharmacyDto);
     }
-
+    //json ->객체
     private PharmacyDto deserializePharmacyDto(String value) throws JsonProcessingException {
         return objectMapper.readValue(value, PharmacyDto.class);
     }

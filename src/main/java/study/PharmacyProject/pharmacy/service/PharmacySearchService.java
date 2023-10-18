@@ -24,10 +24,10 @@ public class PharmacySearchService {
         //redis에서 약국데이터를 조회하고 문제발생시 데이터베이스에서 조회
         List<PharmacyDto> pharmacyDtoList = pharmacyRedisTemplateService.findAll();
         if(!pharmacyDtoList.isEmpty()) {
-            log.info("레디스 성공!");
+            log.info("레디스 약국조회  성공!");
             return pharmacyDtoList;
         }
-        //db에서 모든 약국 조회후 dto로 반환
+        //redis 실패시 db에서 약국 조회후 dto로 반환
         return pharmacyRepositoryService.findAll()
                 .stream()
                 .map(this::convertToPharmacyDto)

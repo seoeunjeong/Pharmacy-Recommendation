@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class PharmacyController {
-    //db데이터를 redis로 동기화하는 메소드 만들기
 
+    //db데이터를 redis로 동기화하는 메소드 만들기
     private final PharmacyRepositoryService pharmacyRepositoryService;
 
     private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
@@ -33,15 +33,17 @@ public class PharmacyController {
 
     public void saveCsvToRedis() {
 
-        List<PharmacyDto> pharmacyDtoList = pharmacyRepositoryService.findAll()
-                .stream().map(pharmacy -> PharmacyDto.builder()
-                        .id(pharmacy.getId())
-                        .pharmacyName(pharmacy.getPharmacyName())
-                        .pharmacyAddress(pharmacy.getPharmacyAddress())
-                        .latitude(pharmacy.getLatitude())
-                        .longitude(pharmacy.getLongitude())
-                        .build())
-                .collect(Collectors.toList());
+        List<PharmacyDto> pharmacyDtoList =
+                pharmacyRepositoryService.findAll()
+                        .stream()
+                        .map(pharmacy -> PharmacyDto.builder()
+                                .id(pharmacy.getId())
+                                .pharmacyName(pharmacy.getPharmacyName())
+                                .pharmacyAddress(pharmacy.getPharmacyAddress())
+                                .latitude(pharmacy.getLatitude())
+                                .longitude(pharmacy.getLongitude())
+                                .build())
+                        .collect(Collectors.toList());
 
         pharmacyDtoList.forEach(pharmacyRedisTemplateService::save);
     }

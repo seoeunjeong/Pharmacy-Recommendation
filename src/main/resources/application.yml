@@ -64,4 +64,4 @@ spring:
 pharmacy:
   recommendation:
     base:
-      url: http://172.31.40.243/dir/ #aws ec2 ip로 변경해야함
+      url: http://172.31.27.198/dir/ #aws ec2 ip로 변경해야함
